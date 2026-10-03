@@ -68,7 +68,7 @@ export default function LoginPage() {
               Entrar
             </Button>
             <p className="text-center text-xs text-muted-foreground">
-              Dica (mock): qualquer senha funciona enquanto a API nao está conectada.
+              Use seu login da base (ex.: armando / 123456)
             </p>
           </form>
         </CardContent>
