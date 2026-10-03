@@ -1,0 +1,78 @@
+'use client';
+import { useEffect, useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Car, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+
+export default function LoginPage() {
+  const { login, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ login: 'andre', senha: '' });
+
+  // Redireciona se ja autenticado
+  useEffect(() => {
+    if (isAuthenticated) router.replace('/painel');
+  }, [isAuthenticated, router]);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!form.login) { toast.error('Informe seu login'); return; }
+    setLoading(true);
+    try {
+      // TODO: REPLACE_WITH_API - hoje usa mock (ver auth-context.tsx)
+      await login({ login: form.login, senha: form.senha });
+      toast.success('Bem-vindo!');
+    } catch (err) {
+      toast.error('Falha ao entrar. Verifique suas credenciais.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-card p-4">
+      <Card className="w-full max-w-md border-border/60 shadow-2xl">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+            <Car className="h-7 w-7 text-primary" />
+          </div>
+          <CardTitle className="text-2xl">Project Manu</CardTitle>
+          <CardDescription>Entre com suas credenciais para acessar</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="login">Login</Label>
+              <Input
+                id="login" placeholder="seu usuario" value={form.login}
+                onChange={(e) => setForm({ ...form, login: e.target.value })}
+                autoComplete="username"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="senha">Senha</Label>
+              <Input
+                id="senha" type="password" placeholder="········" value={form.senha}
+                onChange={(e) => setForm({ ...form, senha: e.target.value })}
+                autoComplete="current-password"
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Entrar
+            </Button>
+            <p className="text-center text-xs text-muted-foreground">
+              Dica (mock): qualquer senha funciona enquanto a API nao está conectada.
+            </p>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
