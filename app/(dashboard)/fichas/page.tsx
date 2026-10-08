@@ -9,10 +9,10 @@ import { FichaEditDialog } from '@/components/ficha-edit-dialog';
 import { useAuth } from '@/contexts/auth-context';
 
 const statusColor: Record<string, string> = {
-  aprovada: 'bg-emerald-600',
+  aprovada: 'bg-green-400',
   reprovada: 'bg-rose-600',
-  negada: 'bg-rose-600',
-  pendente: 'bg-amber-600',
+  negada: 'bg-green-400',
+  pendente: 'bg-gray-900',
   enviada: 'bg-blue-600',
 };
 

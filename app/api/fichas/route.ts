@@ -39,13 +39,19 @@ export async function GET(req: NextRequest) {
 
   // Ordem especial para ElfenAI: em_loja primeiro, comprou no fundo, mais antigo no topo
   if (u.tipo === 'elfenai') {
-    rows.sort((a: any, b: any) => {
-      // comprou vai para o fundo
-      if (a.comprou !== b.comprou) return a.comprou ? 1 : -1;
-      // em_loja vai pra cima
-      if (a.em_loja !== b.em_loja) return a.em_loja ? -1 : 1;
-      // chegou primeiro no topo (created_at asc)
-      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+rows.sort((a: any, b: any) => {
+    // 1. Quem já comprou vai para o final
+    if (a.comprou !== b.comprou) {
+      return a.comprou ? 1 : -1;
+    }
+
+    // 2. Quem está "na loja" sobe para o topo
+    if (a.em_loja !== b.em_loja) {
+      return a.em_loja ? -1 : 1;
+    }
+
+    // 3. Dentro do mesmo grupo: quem chegou primeiro fica em cima (mais antigo primeiro)
+    return new Date(a.created_at || a.data_lead).getTime() - new Date(b.created_at || b.data_lead).getTime();
     });
   }
 

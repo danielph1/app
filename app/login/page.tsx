@@ -13,7 +13,7 @@ export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ login: 'andre', senha: '' });
+  const [form, setForm] = useState({ login: 'login', senha: '' });
 
   // Redireciona se ja autenticado
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function LoginPage() {
               Entrar
             </Button>
             <p className="text-center text-xs text-muted-foreground">
-              Use seu login da base (ex.: armando / 123456)
+              Use seu login da base (ex.: nome / senha)
             </p>
           </form>
         </CardContent>
